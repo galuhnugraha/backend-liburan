@@ -8,7 +8,7 @@ const session = require('express-session');
 const flash = require('connect-flash');
 // mongoose
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/db-news', {useNewUrlParser: true, useUnifiedTopology: true,
+mongoose.connect('mongodb+srv://liburan:28agustus@cluster0.yxa8o.mongodb.net/db-liburan?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true,
 useCreateIndex: true,
 useFindAndModify: false,});
 
