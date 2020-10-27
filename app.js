@@ -17,6 +17,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 //router
 const adminRouter = require('./routes/admin');
+const apiRouter = require('./routes/api');
 
 var app = express();
 
@@ -26,6 +27,7 @@ app.set('view engine', 'ejs');
 app.use(cors())
 app.use(logger('dev'));
 app.use(express.json());
+app.use('/api/v1/news',apiRouter);
 app.use(flash());
 app.use(methodOverride('_method'));
 app.use(session({

@@ -32,6 +32,10 @@ const itemSchema = new mongoose.Schema({
             ref: 'Image'
         }
     ],
+    isPopular: {
+        type: Boolean,
+        default: false
+    },
 
     city: {
         type: String,
