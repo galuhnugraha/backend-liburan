@@ -1,6 +1,7 @@
 const Category = require('../models/Category');
 const Item = require('../models/Item');
 const Image = require('../models/Image');
+const Activity = require('../models/Activity');
 const fs = require('fs-extra');
 const path = require('path');
 
@@ -138,11 +139,11 @@ module.exports = {
             const { id } = req.params;
             const news = await Item.findOne({ _id: id })
                 .populate({ path: 'imageId', select: 'id imageUrl' });
-                // console.log(news.imageId);
+            // console.log(news.imageId);
             const alertMessage = req.flash('alertMessage');
             const alertStatus = req.flash('alertStatus');
             const alert = { message: alertMessage, status: alertStatus };
-            res.render('admin/news/view_news', { title: 'Berita | Show Image News', alert, news, action: 'show image'});
+            res.render('admin/news/view_news', { title: 'Berita | Show Image News', alert, news, action: 'show image' });
         } catch (error) {
             req.flash('alertMessage', `${error.message}`);
             req.flash('alertStatus', 'danger');
@@ -157,7 +158,7 @@ module.exports = {
             const news = await Item.findOne({ _id: id })
                 .populate({ path: 'imageId', select: 'id imageUrl' })
                 .populate({ path: 'categoryId', select: 'id name' })
-                console.log(news);
+            console.log(news);
             const category = await Category.find();
             const alertMessage = req.flash('alertMessage');
             const alertStatus = req.flash('alertStatus');
@@ -210,6 +211,109 @@ module.exports = {
             req.flash('alertMessage', `${error.message}`);
             req.flash('alertStatus', 'danger');
             res.redirect('/admin/news');
+        }
+    },
+
+
+    deleteNews: async (req, res) => {
+        try {
+            const { id } = req.params;
+            const item = await Item.findOne({ _id: id }).populate('imageId');
+            for (let i = 0; i < item.imageId.length; i++) {
+                Image.findOne({ _id: item.imageId[i]._id }).then((image) => {
+                    fs.unlink(path.join(`public/${image.imageUrl}`));
+                    image.remove();
+                }).catch((err) => {
+                    req.flash('alertMessage', `${error.message}`);
+                    req.flash('alertStatus', 'danger');
+                    res.redirect('/admin/news');
+                })
+            }
+            await item.remove();
+            req.flash('alertMessage', 'Success Delete News');
+            req.flash('alertStatus', 'success');
+            res.redirect('/admin/news');
+        } catch (error) {
+            req.flash('alertMessage', `${error.message}`);
+            req.flash('alertStatus', 'danger');
+            res.redirect('/admin/news');
+        }
+    },
+
+
+    viewDetailItems: async (req, res) => {
+        try {
+            const { itemId } = req.params;
+            const alertMessage = req.flash('alertMessage');
+            const alertStatus = req.flash('alertStatus');
+            const alert = { message: alertMessage, status: alertStatus };
+            const activity = await Activity.find({ itemId: itemId });
+            res.render('admin/news/detail_news/view_detail_news', {
+                title: 'Berita | Detail Item',
+                alert,
+                itemId,
+                activity
+            })
+        } catch (error) {
+            req.flash('alertMessage', `${error.message}`);
+            req.flash('alertStatus', 'danger');
+            res.redirect(`/admin/news/show-detail-news/${itemId}`);
+
+        }
+    },
+
+    addActivity: async (req, res) => {
+        const { name, type, itemId } = req.body;
+        try {
+            if (!req.file) {
+                req.flash('alertMessage', 'Image not found');
+                req.flash('alertStatus', 'danger');
+                res.redirect(`/admin/news/show-detail-news/${itemId}`);
+            }
+            const activity = await Activity.create({
+                name,
+                type,
+                itemId,
+                imageUrl: `images/${req.file.filename}`
+            });
+            const item = await Item.findOne({ _id: itemId });
+            item.activityId.push({ _id: activity._id })
+            await item.save();
+            req.flash('alertMessage', 'Success Add Activity');
+            req.flash('alertStatus', 'success');
+            res.redirect(`/admin/news/show-detail-news/${itemId}`);
+        } catch (error) {
+            req.flash('alertMessage', `${error.message}`);
+            req.flash('alertStatus', 'danger');
+            res.redirect(`/admin/news/show-detail-news/${itemId}`);
+        }
+    },
+
+    editActivity: async (req, res) => {
+        const { id, name, type, itemId } = req.body;
+        try {
+            const activity = await Activity.findOne({ _id: id });
+            if (req.file == undefined) {
+                activity.name = name;
+                activity.type = type;
+                await activity.save();
+                req.flash('alertMessage', 'Success update activity');
+                req.flash('alertStatus', 'success');
+                res.redirect(`/admin/news/show-detail-news/${itemId}`);
+            } else {
+                await fs.unlink(path.join(`public/${activity.imageUrl}`));
+                activity.name = name;
+                activity.type = type;
+                activity.imageUrl = `images/${req.file.filename}`
+                await activity.save();
+                req.flash('alertMessage', 'Success update activity');
+                req.flash('alertStatus', 'success');
+                res.redirect(`/admin/news/show-detail-news/${itemId}`);
+            }
+        } catch {
+            req.flash('alertMessage', `${error.message}`);
+            req.flash('alertStatus', 'danger');
+            res.redirect(`/admin/news/show-detail-news/${itemId}`);
         }
     },
 

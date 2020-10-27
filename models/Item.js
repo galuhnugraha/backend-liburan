@@ -32,6 +32,12 @@ const itemSchema = new mongoose.Schema({
             ref: 'Image'
         }
     ],
+    activityId: [
+        {
+            type: ObjectId,
+            ref: 'Activity'
+        }
+    ],
     isPopular: {
         type: Boolean,
         default: false
