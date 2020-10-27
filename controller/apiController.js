@@ -8,7 +8,7 @@ module.exports = {
     landingPage: async (req, res) => {
         try {
             const landingPage = await Item.find()
-                .select('_id title country city author imageId')
+                .select('_id title country city author date imageId')
                 .limit(5)
                 .populate({ path: 'imageId', select: '_id imageUrl' })
 
@@ -17,7 +17,7 @@ module.exports = {
                 .limit(5)
                 .populate({
                     path: 'itemId',
-                    select: '_id title country city author isPopular imageId',
+                    select: '_id title country city author date isPopular imageId',
                     perDocumentLimit: 4,
                     populate: {
                         path: 'imageId',
