@@ -1,0 +1,58 @@
+<div class="tab-pane fade show active" id="edit-news" role="tabpanel" aria-labelledby="profile-tab">
+    <div class="card shadow mb-4 mt-2">
+        <div class="card-body">
+            <form action="/admin/news/<%= news.id %>?_method=PUT" method="POST" enctype="multipart/form-data"> 
+                <div class="form-group">
+                    <label for="name">Title</label>
+                    <input type="text" class="form-control" name="title" value="<%= news.title %>"
+                        placeholder="Enter Title">
+                </div>
+                <div class="form-group">
+                    <label for="name">Author</label>
+                    <input type="text" class="form-control" name="author" value="<%= news.author %>"
+                        placeholder="Enter Author">
+                </div>
+                <div class="form-group">
+                    <label for="name">Country</label>
+                    <input type="text" class="form-control" name="country" value="<%= news.country %>"
+                        placeholder="Enter Country">
+                </div>
+                <div class="form-group">
+                    <label for="name">City</label> 
+                    <input type="text" class="form-control" name="city" value="<%= news.city %>"
+                        placeholder="Enter City">
+                </div>
+                <div class="form-group">
+                    <label for="name">Date</label>
+                    <input type="date" class="form-control" name="date" value="<%= news.date %>"
+                        placeholder="Enter Date">
+                </div>
+                <div class="form-group">
+                    <label for="name">Category</label>
+                    <select class="form-control" name="categoryId">
+                        <option  value="<%= news.categoryId._id %>">
+                            <%= news.categoryId.name %>
+                        </option>
+
+                        <% for(let i=0; i < category.length; i++) {%>
+                            <option value="<%= category[i].id %>">
+                                <%= category[i].name %>
+                            </option>
+                        <% } %>
+
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="name">Image</label>
+                    <input type="file" class="form-control" name="image"
+                        multiple required>
+                </div>
+                <div class="form-group">
+                    <label for="name">Deskripsion</label>
+                    <textarea name="about" class="form-control"><%= news.description %></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+        </div>
+    </div>
+</div>
