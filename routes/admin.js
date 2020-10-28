@@ -23,5 +23,6 @@ router.delete('/news/:id/delete',adminController.deleteNews);
 router.get('/news/show-detail-news/:itemId',adminController.viewDetailItems);
 router.post('/news/add/activity',upload,adminController.addActivity);
 router.put('/news/update/activity',upload,adminController.editActivity);
+router.delete('/news/:itemId/activity/:id',upload,adminController.deleteActivity);
 
 module.exports = router;

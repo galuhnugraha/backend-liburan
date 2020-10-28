@@ -316,5 +316,28 @@ module.exports = {
             res.redirect(`/admin/news/show-detail-news/${itemId}`);
         }
     },
-
+    
+    deleteActivity: async (req, res) => {
+        try {
+            const { id, itemId } = req.params;
+            const activity = await Activity.findOne({ _id: id });
+            const item = await Item.findOne({ _id: itemId }).populate('activityId');
+            for (let i = 0; i < item.activityId.length; i++) {
+                if (item.activityId[i]._id.toString() === activity._id.toString()) {
+                    item.activityId.pull({ _id: activity._id });
+                    await item.save()
+                }
+            }
+            await fs.unlink(path.join(`public/${activity.imageUrl}`));
+            await activity.remove();
+            req.flash('alertMessage', 'Success Delete activity');
+            req.flash('alertStatus', 'success');
+            res.redirect(`/admin/news/show-detail-news/${itemId}`);
+        } catch (error) {
+            console.log(error);
+            req.flash('alertMessage', `${error.message}`);
+            req.flash('alertStatus', 'danger');
+            res.redirect(`/admin/news/show-detail-news/${itemId}`);
+        }
+    }
 }
