@@ -310,7 +310,7 @@ module.exports = {
                 req.flash('alertStatus', 'success');
                 res.redirect(`/admin/news/show-detail-news/${itemId}`);
             }
-        } catch {
+        } catch(error) {
             req.flash('alertMessage', `${error.message}`);
             req.flash('alertStatus', 'danger');
             res.redirect(`/admin/news/show-detail-news/${itemId}`);
