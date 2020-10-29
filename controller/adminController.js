@@ -6,10 +6,21 @@ const fs = require('fs-extra');
 const path = require('path');
 
 module.exports = {
-    viewDashboard: (req, res) => {
-        res.render('admin/dashboard/view_dashboard', {
-            title: "Berita | Dashboard"
-        });
+    viewDashboard: async (req, res) => {
+        try {
+            const category = await Category.find();
+            const item = await Item.find();
+            const activity = await Activity.find()
+            res.render('admin/dashboard/view_dashboard', {
+                title: 'Berita | Dashboard',
+                category,
+                item,
+                activity
+            });
+            // console.log(member);
+        } catch (error) {
+            res.redirect('/admin/dashboard');
+        }
     },
     viewCategory: async (req, res) => {
         try {
