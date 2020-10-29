@@ -32,16 +32,16 @@ module.exports = {
 
     addCategory: async (req, res) => {
         try {
-            const { name} = req.body;
+            const { name } = req.body;
             if (!req.file) {
                 req.flash('alertMessage', 'Image not found');
                 req.flash('alertStatus', 'danger');
                 res.redirect('/admin/category');
             }
-            await Category.create({ 
+            await Category.create({
                 name,
                 imageUrl: `images/${req.file.filename}`
-             });
+            });
             req.flash('alertMessage', 'Success add category');
             req.flash('alertStatus', 'success')
             res.redirect('/admin/category');
@@ -53,19 +53,57 @@ module.exports = {
 
     },
 
+    // editCategory: async (req, res) => {
+    //     const { id, name,imageUrl} = req.body;
+    //     try {
+    //         const category = await Category.findOne({ _id: id });
+    //         if (req.file == undefined) {
+    //             category.name = name;
+    //             // category.imageUrl = `images/${req.file.filename}`;
+    //             await category.save();
+    //             req.flash('alertMessage', 'Success update Category');
+    //             req.flash('alertStatus', 'success');
+    //             res.redirect('/admin/category');
+    //         } else {
+    //             await fs.unlink(path.join(`public/${category.imageUrl}`));
+    //             category.name = name;
+    //             // category.imageUrl = imageUrl;
+    //             category.imageUrl = `images/${req.file.filename}`;
+    //             await category.save();
+    //             req.flash('alertMessage', 'Success update activity');
+    //             req.flash('alertStatus', 'success');
+    //             res.redirect('/admin/category');
+    //         }
+    //     } catch(error) {
+    //         req.flash('alertMessage', `${error.message}`);
+    //         req.flash('alertStatus', 'danger');
+    //         res.redirect('/admin/category');
+    //     }
+    // },
+
     editCategory: async (req, res) => {
+        const { id, name } = req.body;
         try {
-            const { id, name } = req.body;
             const category = await Category.findOne({ _id: id });
-            category.name = name;
-            await category.save()
-            req.flash('alertMessage', 'Success Update Category');
-            req.flash('alertStatus', 'success')
-            res.redirect('/admin/category');
+            if (req.file == undefined) {
+                category.name = name;
+                await category.save();
+                req.flash('alertMessage', 'Success update category');
+                req.flash('alertStatus', 'success');
+                res.redirect(`/admin/category`);
+            } else {
+                await fs.unlink(path.join(`public/${category.imageUrl}`));
+                category.name = name;
+                category.imageUrl = `images/${req.file.filename}`
+                await category.save();
+                req.flash('alertMessage', 'Success update category');
+                req.flash('alertStatus', 'success');
+                res.redirect(`/admin/category`);
+            }
         } catch (error) {
             req.flash('alertMessage', `${error.message}`);
-            req.flash('alertStatus', 'danger')
-            res.redirect('/admin/category');
+            req.flash('alertStatus', 'danger');
+            res.redirect(`/admin/category`);
         }
     },
 
@@ -73,6 +111,7 @@ module.exports = {
         try {
             const { id } = req.params;
             const category = await Category.findOne({ _id: id });
+            await fs.unlink(path.join(`public/${category.imageUrl}`));
             await category.remove()
             req.flash('alertMessage', 'Success delete category');
             req.flash('alertStatus', 'success')
@@ -318,13 +357,13 @@ module.exports = {
                 req.flash('alertStatus', 'success');
                 res.redirect(`/admin/news/show-detail-news/${itemId}`);
             }
-        } catch(error) {
+        } catch (error) {
             req.flash('alertMessage', `${error.message}`);
             req.flash('alertStatus', 'danger');
             res.redirect(`/admin/news/show-detail-news/${itemId}`);
         }
     },
-    
+
     deleteActivity: async (req, res) => {
         try {
             const { id, itemId } = req.params;

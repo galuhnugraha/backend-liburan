@@ -7,8 +7,8 @@ router.get('/dashboard', adminController.viewDashboard);
 
 router.get('/category', adminController.viewCategory);
 router.post('/category', upload, adminController.addCategory);
-router.put('/category', adminController.editCategory);
-router.delete('/category/:id', adminController.deleteCategory);
+router.put('/category', upload, adminController.editCategory);
+router.delete('/category/:id', upload, adminController.deleteCategory);
 
 
 router.get('/news', adminController.viewNews);
