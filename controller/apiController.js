@@ -46,5 +46,20 @@ module.exports = {
             console.log(error)
             res.status(500).json({ message: 'Internal server error' })
         }
-    }
+    },
+
+    detailPage: async (req, res) => {
+        try {
+            const { id } = req.params;
+            const item = await Item.findOne({ _id: id })
+                .populate({ path: 'activityId', select: '_id name type imageUrl' })
+                .populate({ path: 'imageId', select: '_id imageUrl' })
+
+            res.status(200).json({
+                ...item._doc,
+            })
+        } catch (error) {
+            res.status(500).json({ message: 'Internal Server Error' })
+        }
+    },
 };
