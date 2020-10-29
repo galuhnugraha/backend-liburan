@@ -32,8 +32,16 @@ module.exports = {
 
     addCategory: async (req, res) => {
         try {
-            const { name } = req.body;
-            await Category.create({ name });
+            const { name} = req.body;
+            if (!req.file) {
+                req.flash('alertMessage', 'Image not found');
+                req.flash('alertStatus', 'danger');
+                res.redirect('/admin/category');
+            }
+            await Category.create({ 
+                name,
+                imageUrl: `images/${req.file.filename}`
+             });
             req.flash('alertMessage', 'Success add category');
             req.flash('alertStatus', 'success')
             res.redirect('/admin/category');

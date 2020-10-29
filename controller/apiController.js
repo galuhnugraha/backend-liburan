@@ -13,7 +13,7 @@ module.exports = {
                 .populate({ path: 'imageId', select: '_id imageUrl' })
 
             const category = await Category.find()
-                .select('_id name')
+                .select('_id name imageUrl')
                 .limit(5)
                 .populate({
                     path: 'itemId',
