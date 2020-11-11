@@ -5,7 +5,7 @@ const Category = require('../models/Category');
 module.exports = {
     landingPage: async (req, res) => {
         try {
-            const mostPicked = await Item.find()
+            const trendingHoliday = await Item.find()
                 .select('_id title country city author date imageId')
                 .limit(5)
                 .populate({ path: 'imageId', select: '_id imageUrl' })
@@ -37,7 +37,7 @@ module.exports = {
             }
 
             res.status(200).json({
-                mostPicked,
+                trendingHoliday,
                 category,
             });
         } catch (error) {
