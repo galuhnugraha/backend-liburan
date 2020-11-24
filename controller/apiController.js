@@ -56,7 +56,8 @@ module.exports = {
             const item = await Item.findOne({ _id: id })
                 .populate({ path: 'activityId', select: '_id name type imageUrl' })
                 .populate({ path: 'imageId', select: '_id imageUrl' })
-                .populate({path: 'testimonialId',select: '-id name review rate imageUrl'})
+
+            const testimonial = 
 
             
 
