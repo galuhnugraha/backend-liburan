@@ -56,12 +56,12 @@ module.exports = {
             const item = await Item.findOne({ _id: id })
                 .populate({ path: 'activityId', select: '_id name type imageUrl' })
                 .populate({ path: 'imageId', select: '_id imageUrl' })
+                .populate({path: 'testimonialId',select: '-id name review rate imageUrl'})
 
-            const testimonial = Testimonial.find();
+            
 
             res.status(200).json({
                 ...item._doc,
-                testimonial
             })
         } catch (error) {
             res.status(500).json({ message: 'Internal Server Error' })
