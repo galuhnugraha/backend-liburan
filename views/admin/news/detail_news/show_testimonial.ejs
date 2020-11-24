@@ -1,0 +1,83 @@
+<div class="tab-pane fade" id="show-testimoni">
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4 mt-3">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-5">
+                    <form action="/admin/news/add/testimonial" method="POST" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Name</label>
+                            <input type="text" class="form-control" name="name" id="exampleInputEmail1"
+                                aria-describedby="emailHelp" placeholder="Enter Name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Review</label>
+                            <input type="text" class="form-control" name="review" id="exampleInputEmail1"
+                                aria-describedby="emailHelp" placeholder="Enter Review" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Rate</label>
+                            <input type="number" class="form-control" name="rate" id="exampleInputEmail1"
+                                aria-describedby="emailHelp" placeholder="Enter Rate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Image</label>
+                            <input type="file" class="form-control" name="image" id="exampleInputEmail1"
+                                aria-describedby="emailHelp" placeholder="Enter Name" required>
+                        </div>
+                        <input type="hidden" value="<%= itemId %>" name="itemId">
+                        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+                        <button type="submit" class="btn btn-primary">Save</button>
+
+                    </form>
+                </div>
+                <div class="col-md-7">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTableActivity" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Name</th>
+                                    <th>Review</th>
+                                    <th>Rate</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% for(let i = 0; i < testimonial.length; i++ ) {%>
+                                    <tr>
+                                        <td>
+                                            <%= i + 1 %>
+                                        </td>
+                                        <td>
+                                            <%= testimonial[i].name %>
+                                        </td>
+                                        <td>
+                                            <%= testimonial[i].review %>
+                                        </td>
+                                        <td>
+                                            <%= testimonial[i].rate %>
+                                        </td>
+                                        <td>
+                                            <form
+                                                action="/admin/news/<%= itemId %>/testimonial/<%= testimonial[i].id %>?_method=DELETE"
+                                                method="POST">
+                                                <a href="javascript:void()" type="button"
+                                                    class="btn btn-warning btn-circle btn-sm button-update"
+                                                    data-id="<%= testimonial[i].id %>" data-name="<%= testimonial[i].name %>"
+                                                    data-review="<%= testimonial[i].review %>" data-rate="<%= testimonial[i].rate %>"><i class="fas fa-edit"></i></a>
+                                                <button type="submit" class="btn btn-danger btn-circle btn-sm"><i
+                                                        class="fas fa-trash"></i></button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                <%}%>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

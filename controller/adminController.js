@@ -4,6 +4,7 @@ const Image = require('../models/Image');
 const Activity = require('../models/Activity');
 const fs = require('fs-extra');
 const path = require('path');
+const Testimonial = require('../models/Testimonial');
 
 module.exports = {
     viewDashboard: async (req, res) => {
@@ -306,17 +307,44 @@ module.exports = {
             const alertStatus = req.flash('alertStatus');
             const alert = { message: alertMessage, status: alertStatus };
             const activity = await Activity.find({ itemId: itemId });
+            const testimonial = await Testimonial.find({ itemId: itemId });
             res.render('admin/news/detail_news/view_detail_news', {
                 title: 'Berita | Detail Item',
                 alert,
                 itemId,
-                activity
+                activity,
+                testimonial
             })
         } catch (error) {
             req.flash('alertMessage', `${error.message}`);
             req.flash('alertStatus', 'danger');
             res.redirect(`/admin/news/show-detail-news/${itemId}`);
+        }
+    },
 
+    addTestimonial: async (req, res) => {
+        const { name, review, rate, itemId } = req.body;
+        try {
+            if (!req.file) {
+                req.flash('alertMessage', 'Image not found');
+                req.flash('alertStatus', 'danger');
+                res.redirect(`/admin/news/show-detail-news/${itemId}`);
+            }
+            const testimonial = await Testimonial.create({
+                name,
+                review,
+                rate,
+                itemId,
+                imageUrl: `images/${req.file.filename}`
+            });
+            const item = await Item.findOne({ _id: itemId });
+            item.testimonialId.push({ _id: testimonial._id })
+            await item.save();
+            req.flash('alertMessage', 'Success Add Testimonial');
+            req.flash('alertStatus', 'success');
+            res.redirect(`/admin/news/show-detail-news/${itemId}`);
+        } catch (error) {
+            res.redirect(`/admin/news/show-detail-news/${itemId}`);
         }
     },
 

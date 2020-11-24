@@ -38,6 +38,13 @@ const itemSchema = new mongoose.Schema({
             ref: 'Activity'
         }
     ],
+    testimonialId: [
+        {
+            type: ObjectId,
+            ref: 'Testimonial'
+        }
+    ],
+
     isPopular: {
         type: Boolean,
         default: false

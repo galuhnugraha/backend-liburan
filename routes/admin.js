@@ -18,6 +18,9 @@ router.get('/news/:id',adminController.showEditNews);
 router.put('/news/:id',uploadMultiple,adminController.editNews);
 router.delete('/news/:id/delete',adminController.deleteNews);
 
+//endpoint testimonial
+router.get('/news/show-detail-news/:itemId',adminController.viewDetailItems);
+router.post('/news/add/testimonial',upload,adminController.addTestimonial);
 
 //endpoint activity
 router.get('/news/show-detail-news/:itemId',adminController.viewDetailItems);
