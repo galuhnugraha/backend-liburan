@@ -57,12 +57,13 @@ module.exports = {
                 .populate({ path: 'activityId', select: '_id name type imageUrl' })
                 .populate({ path: 'imageId', select: '_id imageUrl' })
 
-            const testimonial = 
+            const testimonial = Testimonial.find()
 
             
 
             res.status(200).json({
                 ...item._doc,
+                testimonial
             })
         } catch (error) {
             res.status(500).json({ message: 'Internal Server Error' })
