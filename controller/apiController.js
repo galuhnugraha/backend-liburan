@@ -1,5 +1,6 @@
 const Item = require('../models/Item');
 const Category = require('../models/Category');
+const Testimonial = require('../models/Testimonial');
 // const { path } = require('../app');
 
 module.exports = {
@@ -36,9 +37,12 @@ module.exports = {
                 }
             }
 
+            const testimonial = Testimonial.find();
+
             res.status(200).json({
                 mostPicked,
                 category,
+                testimonial
             });
         } catch (error) {
             console.log(error)
@@ -53,8 +57,11 @@ module.exports = {
                 .populate({ path: 'activityId', select: '_id name type imageUrl' })
                 .populate({ path: 'imageId', select: '_id imageUrl' })
 
+            const testimonial = Testimonial.find();
+
             res.status(200).json({
                 ...item._doc,
+                testimonial
             })
         } catch (error) {
             res.status(500).json({ message: 'Internal Server Error' })
