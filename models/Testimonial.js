@@ -6,16 +6,16 @@ const testimonialSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    imageUrl: {
-        type: String,
-        required: true
-    },
     review: {
         type: String,
         required: true
     },
     rate: {
         type: Number,
+        required: true
+    },
+    imageUrl: {
+        type: String,
         required: true
     },
     itemId : {

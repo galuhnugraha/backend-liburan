@@ -37,12 +37,9 @@ module.exports = {
                 }
             }
 
-            const testimonial = Testimonial.find();
-
             res.status(200).json({
                 mostPicked,
                 category,
-                testimonial
             });
         } catch (error) {
             console.log(error)
@@ -55,15 +52,11 @@ module.exports = {
             const { id } = req.params;
             const item = await Item.findOne({ _id: id })
                 .populate({ path: 'activityId', select: '_id name type imageUrl' })
+                .populate({path: 'testimonialId',select: '_id name review rate imageUrl'})
                 .populate({ path: 'imageId', select: '_id imageUrl' })
-
-            const testimonial = Testimonial.find()
-
-            
 
             res.status(200).json({
                 ...item._doc,
-                testimonial
             })
         } catch (error) {
             res.status(500).json({ message: 'Internal Server Error' })
